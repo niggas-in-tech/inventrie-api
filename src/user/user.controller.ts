@@ -1,15 +1,31 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RequestValidationPipe } from 'src/common/pipes/validation.pipe';
+import { hashPassword } from 'src/utils/helpers/auth.helpers';
+import { plainToInstance } from 'class-transformer';
+import { UserResource } from './resources/user';
 
 @Controller('api/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body(new RequestValidationPipe()) createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(
+    @Body(new RequestValidationPipe()) createUserDto: CreateUserDto,
+  ) {
+    const { password } = createUserDto;
+    const { hash, salt } = await hashPassword(password);
+    const userData = { ...createUserDto, password: hash, salt };
+    const user = await this.userService.create(userData);
+    return plainToInstance(UserResource, user);
   }
 
   @Get()
@@ -18,7 +34,11 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const user = await this.userService.findById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return plainToInstance(UserResource, user);
   }
 }

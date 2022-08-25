@@ -18,7 +18,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prisma:migrate-dev": "dotenv -e .env.development npx prisma migrate dev",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
@@ -33,6 +35,7 @@
     "class-validator": "^0.13.2",
     "cross-env": "^7.0.3",
     "dayjs": "^1.11.5",
+    "dotenv-cli": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
     "pino": "^8.4.1",
     "pino-http": "^8.2.0",
@@ -63,7 +66,8 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "4.0.0",
-    "typescript": "^4.3.5"
+    "typescript": "^4.3.5",
+    "husky": "^8.0.0"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -80,6 +84,9 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    }
   }
 }

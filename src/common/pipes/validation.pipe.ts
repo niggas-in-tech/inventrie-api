@@ -1,14 +1,9 @@
-import {
-  PipeTransform,
-  Injectable,
-  ArgumentMetadata,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 // import { AnyZodObject, ZodError } from 'zod';
 
-class RequestValidationError extends Error {
+export class RequestValidationError extends Error {
   statusCode: number;
   message: string;
   errors: { path: string; message: string }[];
