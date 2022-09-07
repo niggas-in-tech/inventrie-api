@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import configuration from './config/env.config';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import configuration from './config/env.config';
           ? `.env.${process.env.NODE_ENV}`
           : '.env',
     }),
+    PrismaModule,
     UserModule,
   ],
   controllers: [AppController],
