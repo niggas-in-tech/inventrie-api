@@ -1,6 +1,6 @@
 import * as argon2 from 'argon2';
 import * as bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import config from '../../config/env.config';
 /**
  * Provides helper methods for authentication
@@ -42,11 +42,11 @@ export async function comparePassword(
  * @returns {string} - jwt token
  */
 export function generateJwt(
-  data: Record<string, unknown>,
+  data = {},
   secretKey = 'accessTokenKey',
-  options?: jwt.SignOptions | undefined,
+  options = { expiresIn: '1h' },
 ) {
-  const key = config[secretKey];
+  const key = config().jwt[secretKey];
   return jwt.sign(data, key, { ...options });
 }
 
@@ -58,7 +58,7 @@ export function generateJwt(
  */
 export async function verifyJwt(token: string, secretKey = 'accessTokenKey') {
   try {
-    const key = config[secretKey];
+    const key = config().jwt[secretKey];
     return jwt.verify(token, key);
   } catch (error) {
     return null;

@@ -11,7 +11,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { RequestValidationPipe } from 'src/common/pipes/validation.pipe';
 import { hashPassword } from 'src/utils/helpers/auth.helpers';
 import { plainToInstance } from 'class-transformer';
-import { UserResource } from './resources/user';
+import { UserResource } from './resource/user';
 
 @Controller('api/users')
 export class UserController {

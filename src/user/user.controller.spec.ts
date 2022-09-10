@@ -35,8 +35,10 @@ describe('UserController', () => {
 
     it('should fail [unique constraint]', async () => {
       try {
-        const resp = await controller.create(newUser);
-      } catch (error) {}
+        await controller.create(newUser);
+      } catch (error) {
+        expect(error.code).toBe('P2002');
+      }
     });
   });
 });

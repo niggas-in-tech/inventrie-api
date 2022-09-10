@@ -3,6 +3,7 @@ import {
   ArgumentsHost,
   HttpStatus,
   NotFoundException,
+  HttpException,
 } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import * as dayjs from 'dayjs';
@@ -19,7 +20,9 @@ export class AppExceptionsFilter extends BaseExceptionFilter {
     const request = ctx.getRequest<Request>();
     let code = (exception as any)?.code || 'HTTP_EXCEPTION';
     let status =
-      (exception as any)?.statusCode || HttpStatus.INTERNAL_SERVER_ERROR;
+      (exception as any)?.statusCode ||
+      (exception as any)?.status ||
+      HttpStatus.INTERNAL_SERVER_ERROR;
     let message = 'Something broke on the server';
     let meta = {};
     const errors = (exception as any)?.errors || [];
@@ -32,6 +35,13 @@ export class AppExceptionsFilter extends BaseExceptionFilter {
       status = 422;
       code = 'VALIDATION_FAILED';
     }
+
+    if (exception instanceof HttpException) {
+      message = exception.message;
+      status = exception.getStatus();
+      code = 'HTTP_EXCEPTION';
+    }
+
     if (exception instanceof NotFoundException) {
       message = 'Route not found';
       status = 404;

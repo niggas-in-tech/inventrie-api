@@ -1,5 +1,5 @@
 export const newUser = {
-  email: 'test@guy.com',
+  email: 'testguy@mail.com',
   phone: '2335452728839',
   firstName: 'Test',
   lastName: 'Guy',
