@@ -9,6 +9,8 @@ on:
 
 env:
   DATABASE_URL: ${{ secrets.DATABASE_URI }}
+  ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_SECRET }}
+  REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_SECRET }}
 
 
 jobs:
