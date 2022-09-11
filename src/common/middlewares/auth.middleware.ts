@@ -28,7 +28,7 @@ export class AuthMiddleware implements NestMiddleware {
   async decodeToken(token) {
     const decoded = await verifyJwt(token);
     if (decoded && decoded.sub) {
-      return this.userService.findById(decoded.sub);
+      return this.userService.findById(decoded.sub + '');
     }
   }
 }
