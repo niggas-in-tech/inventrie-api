@@ -10,7 +10,9 @@ describe('ProductCategoryService', () => {
       providers: [ProductCategoryService, PrismaService],
     }).compile();
 
-    service = module.get<ProductCategoryService>(ProductCategoryService);
+    service = await module.resolve<ProductCategoryService>(
+      ProductCategoryService,
+    );
   });
 
   it('should be defined', () => {
