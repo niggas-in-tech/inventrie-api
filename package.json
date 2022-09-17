@@ -32,7 +32,8 @@
     "@nestjs/core": "^9.0.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^9.0.0",
-    "@prisma/client": "^4.3.0",
+    "@nestjs/swagger": "^6.1.2",
+    "@prisma/client": "^4.3.1",
     "argon2": "^0.28.7",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
@@ -44,7 +45,7 @@
     "pino": "^8.4.1",
     "pino-http": "^8.2.0",
     "pino-pretty": "^9.0.1",
-    "prisma": "^4.3.0",
+    "prisma": "^4.3.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"

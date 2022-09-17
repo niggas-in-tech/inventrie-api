@@ -1,4 +1,10 @@
-import { Body, Controller, Get, HttpException, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Post,
+} from '@nestjs/common';
 import { RequestValidationPipe } from 'src/common/pipes/validation.pipe';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { comparePassword, generateJwt } from 'src/utils/helpers/auth.helpers';
@@ -12,7 +18,7 @@ export class AuthController {
   async login(@Body(new RequestValidationPipe()) loginDto: LoginDto) {
     const { email, password } = loginDto;
     const user = await this.prisma.user.findUnique({ where: { email } });
-    const err = new HttpException('Invalid credentials', 400);
+    const err = new BadRequestException('Invalid credentials');
     if (!user) {
       throw err;
     }

@@ -1,4 +1,4 @@
-import { HttpException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { hashPassword } from 'src/utils/helpers/auth.helpers';
@@ -43,7 +43,7 @@ describe('AuthController', () => {
           password: 'wrong password',
         });
       } catch (error) {
-        expect(error).toBeInstanceOf(HttpException);
+        expect(error).toBeInstanceOf(BadRequestException);
       }
     });
   });

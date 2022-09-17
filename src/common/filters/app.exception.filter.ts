@@ -3,7 +3,6 @@ import {
   ArgumentsHost,
   HttpStatus,
   NotFoundException,
-  HttpException,
 } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import * as dayjs from 'dayjs';
@@ -23,7 +22,8 @@ export class AppExceptionsFilter extends BaseExceptionFilter {
       (exception as any)?.statusCode ||
       (exception as any)?.status ||
       HttpStatus.INTERNAL_SERVER_ERROR;
-    let message = 'Something broke on the server';
+    let message =
+      (exception as any)?.message ?? 'Something broke on the server';
     let meta = {};
     const errors = (exception as any)?.errors || [];
 
@@ -34,12 +34,6 @@ export class AppExceptionsFilter extends BaseExceptionFilter {
       message = 'Resource validation failed';
       status = 422;
       code = 'VALIDATION_FAILED';
-    }
-
-    if (exception instanceof HttpException) {
-      message = exception.message;
-      status = exception.getStatus();
-      code = 'HTTP_EXCEPTION';
     }
 
     if (exception instanceof NotFoundException) {
