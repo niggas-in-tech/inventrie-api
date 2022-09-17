@@ -21,10 +21,12 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:init": "npx prisma generate && npx prisma migrate dev --name test",
+    "prisma:init-prod": "npx prisma generate && npx prisma migrate deploy",
     "prisma:migrate-dev": "dotenv -e .env.development npx prisma migrate dev",
     "prisma:migrate-test": "dotenv -e .env.test npx prisma migrate dev",
     "prisma:studio": "dotenv -e .env.development npx prisma studio",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "deploy": "npm ci && npm run prisma:init-prod && npm run build && npm run start:prod"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
