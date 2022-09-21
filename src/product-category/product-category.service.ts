@@ -1,4 +1,4 @@
-import { Inject, Injectable, Scope } from '@nestjs/common';
+import { HttpException, Inject, Injectable, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -28,16 +28,39 @@ export class ProductCategoryService {
 
   findOne(id: string) {
     const userId = this.request.res.locals.user.id;
-    return this.prisma.productCategory.findMany({
+    return this.prisma.productCategory.findFirst({
       where: { id, userId },
     });
   }
 
-  update(id: string, updateProductCategoryDto: UpdateProductCategoryDto) {
-    return `This action updates a #${id} productCategory`;
+  async update(id: string, updateProductCategoryDto: UpdateProductCategoryDto) {
+    const userId = this.request.res.locals.user.id;
+    const category = await this.prisma.productCategory.findFirst({
+      where: { id, userId },
+    });
+
+    if (!category) {
+      throw new HttpException('Category not found', 404);
+    }
+
+    return this.prisma.productCategory.update({
+      where: { id },
+      data: { ...updateProductCategoryDto, updatedAt: new Date() },
+    });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} productCategory`;
+  async remove(id: string) {
+    const userId = this.request.res.locals.user.id;
+    const category = await this.prisma.productCategory.findFirst({
+      where: { id, userId },
+    });
+
+    if (!category) {
+      throw new HttpException('Category not found', 404);
+    }
+
+    return this.prisma.productCategory.delete({
+      where: { id },
+    });
   }
 }

@@ -12,12 +12,13 @@ async function bootstrap() {
   const { httpAdapter } = app.get(HttpAdapterHost);
   const config = new DocumentBuilder()
     .setTitle('Inventrie')
-    .setDescription('Inventrie API description')
+    .setDescription('Inventrie API docs')
     .setVersion('1.0')
     .addTag('inventory')
+    .addServer(process.env.MAIN_URL)
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
+  SwaggerModule.setup('docs', app, document);
   app.use(loggerMiddleware);
   app.useGlobalFilters(new AppExceptionsFilter(httpAdapter));
 

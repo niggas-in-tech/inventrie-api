@@ -6,11 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
 } from '@nestjs/common';
 import { ProductCategoryService } from './product-category.service';
 import { CreateProductCategoryDto } from './dto/create-product-category.dto';
 import { UpdateProductCategoryDto } from './dto/update-product-category.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('product-categories')
 @Controller('api/product-categories')
 export class ProductCategoryController {
   constructor(
@@ -28,8 +31,12 @@ export class ProductCategoryController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productCategoryService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const category = await this.productCategoryService.findOne(id);
+    if (!category) {
+      throw new HttpException('Category not found', 404);
+    }
+    return category;
   }
 
   @Patch(':id')
