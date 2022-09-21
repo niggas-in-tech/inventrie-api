@@ -13,6 +13,8 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthMiddleware } from './common/middlewares/auth.middleware';
 import { UserController } from './user/user.controller';
+import { ProductCategoryModule } from './product-category/product-category.module';
+import { ProductCategoryController } from './product-category/product-category.controller';
 
 @Module({
   imports: [
@@ -27,6 +29,7 @@ import { UserController } from './user/user.controller';
     PrismaModule,
     UserModule,
     AuthModule,
+    ProductCategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -37,5 +40,6 @@ export class AppModule implements NestModule {
       .apply(AuthMiddleware)
       .exclude({ path: 'api/users', method: RequestMethod.POST })
       .forRoutes(UserController);
+    consumer.apply(AuthMiddleware).forRoutes(ProductCategoryController);
   }
 }

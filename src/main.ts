@@ -1,4 +1,5 @@
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { AppExceptionsFilter } from './common/filters/app.exception.filter';
 import envVars from './config/env.config';
@@ -9,7 +10,15 @@ const { port } = envVars();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const { httpAdapter } = app.get(HttpAdapterHost);
-
+  const config = new DocumentBuilder()
+    .setTitle('Inventrie')
+    .setDescription('Inventrie API docs')
+    .setVersion('1.0')
+    .addTag('inventory')
+    .addServer(process.env.MAIN_URL)
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
   app.use(loggerMiddleware);
   app.useGlobalFilters(new AppExceptionsFilter(httpAdapter));
 

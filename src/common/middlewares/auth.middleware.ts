@@ -15,17 +15,18 @@ export class AuthMiddleware implements NestMiddleware {
     if (!user) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
+    req.res.locals.user = user;
     next();
   }
 
-  extractToken(req) {
+  extractToken(req: Request) {
     const authorization = req.get('authorization');
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
       return authorization.substring(7);
     }
   }
 
-  async decodeToken(token) {
+  async decodeToken(token: string) {
     const decoded = await verifyJwt(token);
     if (decoded && decoded.sub) {
       return this.userService.findById(decoded.sub + '');
